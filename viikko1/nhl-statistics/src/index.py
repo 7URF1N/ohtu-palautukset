@@ -1,4 +1,4 @@
-from statistics_service import StatisticsService
+from statistics_service import StatisticsService, SortBy
 from player_reader import PlayerReader
 
 
@@ -19,6 +19,14 @@ def main():
     for player in top_scorers:
         print(player)
 
+    print("Top goal scorers:")
+    for player in stats.top(5, SortBy.GOALS):
+        print(player)
+
+    print()
+    print("Top by assists:")
+    for player in stats.top(5, SortBy.ASSISTS):
+        print(player)
 
 if __name__ == "__main__":
     main()

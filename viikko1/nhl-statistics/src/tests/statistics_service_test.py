@@ -45,3 +45,36 @@ class TestStatisticsService(unittest.TestCase):
     def test_pyydetaan_liikaa_pelaajia(self):
         players = self.stats.top(10)
         self.assertEqual(len(players), 5)
+
+    def test_top_maalien_mukaan(self):
+        from statistics_service import SortBy
+
+        players = self.stats.top(3, SortBy.GOALS)
+        names = [player.name for player in players]
+
+        self.assertEqual(
+            names,
+            ["Lemieux", "Yzerman", "Kurri"]
+        )
+
+    def test_top_syottojen_mukaan(self):
+        from statistics_service import SortBy
+
+        players = self.stats.top(3, SortBy.ASSISTS)
+        names = [player.name for player in players]
+
+        self.assertEqual(
+            names,
+            ["Gretzky", "Yzerman", "Lemieux"]
+        )
+
+    def test_top_pisteiden_mukaan(self):
+        from statistics_service import SortBy
+
+        players = self.stats.top(3, SortBy.POINTS)
+        names = [player.name for player in players]
+
+        self.assertEqual(
+            names,
+            ["Gretzky", "Lemieux", "Yzerman"]
+        )
