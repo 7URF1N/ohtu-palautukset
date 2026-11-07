@@ -1,0 +1,17 @@
+[FORMAT]
+max-line-length=80
+indent-string='    '
+
+[REFACTORING]
+max-nested-blocks=2
+
+[DESIGN]
+max-statements=10
+max-args=4
+min-public-methods=1
+
+[MESSAGES CONTROL]
+disable=
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring
