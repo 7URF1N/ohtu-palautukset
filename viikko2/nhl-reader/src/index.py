@@ -20,26 +20,42 @@ def ask_selection():
     if season == "q":
         return None
 
-    nationality = Prompt.ask(
-        "Nationality (FIN/SWE/CAN/USA/... or q)",
-        default="FIN"
-    ).strip().upper()
+    filter_type = Prompt.ask(
+        "Filter by",
+        choices=["nationality", "team"],
+        default="nationality"
+    )
 
-    if nationality == "Q":
+    selection = ask_filter_value(filter_type)
+
+    if selection == "Q":
         return None
 
-    return season, nationality
+    return season, filter_type, selection
 
-def get_players(season, nationality):
+def ask_filter_value(filter_type):
+    if filter_type == "nationality":
+        prompt = "Nationality (FIN/SWE/CAN/USA/... or q)"
+        default = "FIN"
+    else:
+        prompt = "Team abbreviation (e.g. BOS) or q"
+        default = "BOS"
+
+    return Prompt.ask(prompt, default=default).strip().upper()
+
+def get_players(season, filter_type, selection):
     url = f"https://studies.cs.helsinki.fi/nhlstats/{season}/players"
     reader = PlayerReader(url)
     stats = PlayerStats(reader)
 
-    return stats.top_scorers_by_nationality(nationality)
+    if filter_type == "team":
+        return stats.top_scorers_by_team(selection)
 
-def create_table(players, season, nationality):
+    return stats.top_scorers_by_nationality(selection)
+
+def create_table(players, season, filter_type, selection):
     table = Table(
-        title=f"Season {season} players from {nationality}"
+        title=f"Season {season} players: {filter_type} {selection}"
     )
 
     table.add_column("Player", style="cyan")
@@ -59,9 +75,9 @@ def create_table(players, season, nationality):
 
     return table
 
-def show_players(console, season, nationality):
+def show_players(console, season, filter_type, selection):
     try:
-        players = get_players(season, nationality)
+        players = get_players(season, filter_type, selection)
     except RequestException as error:
         console.print(f"[red]Error fetching players: {error}[/red]")
         return
@@ -70,7 +86,7 @@ def show_players(console, season, nationality):
         console.print("[yellow]No players found.[/yellow]")
         return
 
-    table = create_table(players, season, nationality)
+    table = create_table(players, season, filter_type, selection)
     console.print(table)
     console.print()
 
@@ -83,8 +99,8 @@ def main():
         if selection is None:
             break
 
-        season, nationality = selection
-        show_players(console, season, nationality)
+        season, filter_type, value = selection
+        show_players(console, season, filter_type, value)
 
 if __name__ == "__main__":
     main()
