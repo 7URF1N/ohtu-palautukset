@@ -6,3 +6,7 @@ Tehtävät 2–13:
 https://github.com/7URF1N/ohtuvarasto
 
 Tehtävät 14–17: [viikko1](viikko1/)
+
+## Viikko 3
+
+- Tehtävät 2–4: https://github.com/7URF1N/webcounter
