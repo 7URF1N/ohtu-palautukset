@@ -24,10 +24,12 @@ class Ostoskori:
 
     def poista_tuote(self, poistettava: Tuote):
         ostos = next((ostos for ostos in self._ostokset if ostos.tuote is poistettava), None)
-        if ostos and ostos.lukumaara() > 1:
+        if ostos:
             ostos.muuta_lukumaaraa(-1)
             self._tavaroita -= 1
             self._hinta -= poistettava.hinta()
+            if ostos.lukumaara() == 0:
+                self._ostokset.remove(ostos)
 
     def tyhjenna(self):
         pass
