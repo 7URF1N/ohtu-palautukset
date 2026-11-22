@@ -1,2 +1,3 @@
 ﻿Versio 1: Git-tagien harjoittelu alkaa.
 Versio 2: Harjoittelen Gitin committeja.
+Versio 3: Valmis seuraavaa tagia varten.
