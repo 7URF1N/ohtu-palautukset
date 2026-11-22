@@ -16,7 +16,10 @@ class Ostoskori:
     def lisaa_tuote(self, lisattava: Tuote):
         self._tavaroita += 1
         self._hinta += lisattava.hinta()
-        if not any(ostos.tuote is lisattava for ostos in self._ostokset):
+        ostos = next((ostos for ostos in self._ostokset if ostos.tuote is lisattava), None)
+        if ostos:
+            ostos.muuta_lukumaaraa(1)
+        else:
             self._ostokset.append(Ostos(lisattava))
 
     def poista_tuote(self, poistettava: Tuote):
