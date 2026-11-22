@@ -106,16 +106,18 @@ class TestKauppa(unittest.TestCase):
             "pekka", 42, "12345", "33333-44455", 10
         )
 
-    def test_varastossa_vain_yksi_tuote_veloitetaan_kerran(self):
+    def test_loppunutta_tuotetta_ei_veloiteta(self):
         pankki_mock = Mock()
         viitegeneraattori_mock = Mock()
         varasto_mock = Mock()
 
         viitegeneraattori_mock.uusi.return_value = 42
 
-        # Ensimmäisellä kyselyllä tuotetta on yksi,
-        # toisella kyselyllä varasto on tyhjä.
-        varasto_mock.saldo.side_effect = [1, 0]
+        # Maitoa on varastossa, leipä on loppunut.
+        varasto_mock.saldo.side_effect = lambda tuote_id: {
+            1: 10,
+            2: 0
+        }[tuote_id]
 
         varasto_mock.hae_tuote.return_value = Tuote(1, "maito", 5)
 
@@ -123,7 +125,7 @@ class TestKauppa(unittest.TestCase):
 
         kauppa.aloita_asiointi()
         kauppa.lisaa_koriin(1)
-        kauppa.lisaa_koriin(1)
+        kauppa.lisaa_koriin(2)
         kauppa.tilimaksu("pekka", "12345")
 
         pankki_mock.tilisiirto.assert_called_once_with(
