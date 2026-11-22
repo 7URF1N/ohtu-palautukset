@@ -1,1 +1,2 @@
 ﻿Versio 1: Git-tagien harjoittelu alkaa.
+Versio 2: Harjoittelen Gitin committeja.
